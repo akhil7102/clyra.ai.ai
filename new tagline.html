@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clyra Hero Section</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #000000 50%, #0d1117 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    html {
+      height: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Ambient background particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.15;
+      filter: blur(40px);
+    }
+
+    .particle-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #667eea 0%, transparent 70%);
+      top: 10%;
+      left: 10%;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .particle-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #66ffb2 0%, transparent 70%);
+      bottom: 10%;
+      right: 10%;
+      animation: float 25s ease-in-out infinite reverse;
+    }
+
+    .particle-3 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, #a8c0ff 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: float 30s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(30px, -30px) scale(1.1);
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+      }
+    }
+
+    .hero-container {
+      text-align: center;
+      padding: 4rem 3rem;
+      max-width: 900px;
+      width: 90%;
+      position: relative;
+      z-index: 10;
+    }
+
+    .main-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 2rem 0;
+      background: linear-gradient(135deg, #a8c0ff 0%, #66ffb2 50%, #c2e9fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(168, 192, 255, 0.3));
+      animation: text-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes text-glow {
+      0%, 100% {
+        filter: drop-shadow(0 0 30px rgba(168, 192, 255, 0.3));
+      }
+      50% {
+        filter: drop-shadow(0 0 40px rgba(102, 255, 178, 0.4));
+      }
+    }
+
+    .subheading {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.7;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.3px;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, #667eea 0%, #66ffb2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+      filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.4));
+    }
+
+
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-container {
+        padding: 3rem 2rem;
+        width: 95%;
+      }
+
+      .main-heading {
+        font-size: 2.5rem;
+      }
+      
+      .subheading {
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-container {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .main-heading {
+        font-size: 2rem;
+      }
+      
+      .subheading {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Ambient particles -->
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+  <main class="hero-container">
+   <h1 class="main-heading" id="main-heading">What will you create with Clyra today?</h1>
+   <p class="subheading" id="subheading">Build intelligent apps, websites, and tools with the power of <span class="highlight">AI</span>.</p>
+  </main>
+  <script>
+    const defaultConfig = {
+      main_heading: "What will you create with Clyra today?",
+      subheading: "Build intelligent apps, websites, and tools with the power of AI.",
+      gradient_primary: "#a8c0ff",
+      gradient_secondary: "#66ffb2",
+      gradient_tertiary: "#c2e9fb",
+      text_color: "rgba(255, 255, 255, 0.75)",
+      background_start: "#0a0e27",
+      background_end: "#0d1117"
+    };
+
+    async function onConfigChange(config) {
+      const mainHeading = config.main_heading || defaultConfig.main_heading;
+      const subheading = config.subheading || defaultConfig.subheading;
+      const gradientPrimary = config.gradient_primary || defaultConfig.gradient_primary;
+      const gradientSecondary = config.gradient_secondary || defaultConfig.gradient_secondary;
+      const gradientTertiary = config.gradient_tertiary || defaultConfig.gradient_tertiary;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const backgroundStart = config.background_start || defaultConfig.background_start;
+      const backgroundEnd = config.background_end || defaultConfig.background_end;
+
+      // Update text content
+      document.getElementById('main-heading').textContent = mainHeading;
+      
+      // Update subheading with AI highlight
+      const subheadingEl = document.getElementById('subheading');
+      const aiIndex = subheading.indexOf('AI');
+      if (aiIndex !== -1) {
+        const beforeAI = subheading.substring(0, aiIndex);
+        const afterAI = subheading.substring(aiIndex + 2);
+        subheadingEl.innerHTML = `${beforeAI}<span class="highlight">AI</span>${afterAI}`;
+      } else {
+        subheadingEl.textContent = subheading;
+      }
+
+      // Update colors
+      const mainHeadingEl = document.getElementById('main-heading');
+      mainHeadingEl.style.background = `linear-gradient(135deg, ${gradientPrimary} 0%, ${gradientSecondary} 50%, ${gradientTertiary} 100%)`;
+      mainHeadingEl.style.webkitBackgroundClip = 'text';
+      mainHeadingEl.style.backgroundClip = 'text';
+      
+      subheadingEl.style.color = textColor;
+      document.body.style.background = `linear-gradient(135deg, ${backgroundStart} 0%, #000000 50%, ${backgroundEnd} 100%)`;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_start || defaultConfig.background_start,
+              set: (value) => {
+                config.background_start = value;
+                window.elementSdk.setConfig({ background_start: value });
+              }
+            },
+            {
+              get: () => config.gradient_primary || defaultConfig.gradient_primary,
+              set: (value) => {
+                config.gradient_primary = value;
+                window.elementSdk.setConfig({ gradient_primary: value });
+              }
+            },
+            {
+              get: () => config.gradient_secondary || defaultConfig.gradient_secondary,
+              set: (value) => {
+                config.gradient_secondary = value;
+                window.elementSdk.setConfig({ gradient_secondary: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || 'Inter',
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || 16,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_heading", config.main_heading || defaultConfig.main_heading],
+          ["subheading", config.subheading || defaultConfig.subheading]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b547f6732e3a3f',t:'MTc2MjYwNzExOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

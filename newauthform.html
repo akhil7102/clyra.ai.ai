@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+        
+        .glass-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-button:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+        
+        .glass-alert {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .success-message {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .success-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .form-field {
+            transition: all 0.2s ease;
+        }
+        
+        .form-field:focus-within {
+            transform: translateY(-1px);
+        }
+        
+        .glass-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+        
+        .glass-text {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .glass-link {
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+        }
+        
+        .glass-link:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .floating-shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"><!-- Floating background shapes -->
+  <div class="floating-shapes">
+   <div class="floating-shape"></div>
+   <div class="floating-shape"></div>
+   <div class="floating-shape"></div>
+  </div>
+  <div class="max-w-md w-full space-y-8">
+   <div class="text-center">
+    <h2 id="form-title" class="mt-6 text-3xl font-bold text-white drop-shadow-lg">Create your account</h2>
+    <p id="form-subtitle" class="mt-2 text-sm glass-text">Join us today and get started</p>
+   </div>
+   <div class="glass-container py-8 px-6 rounded-lg"><!-- Success Message -->
+    <div id="success-alert" class="success-message glass-alert mb-4 p-4 rounded-md">
+     <div class="flex">
+      <div class="flex-shrink-0">
+       <svg class="h-5 w-5 text-green-300" viewbox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+       </svg>
+      </div>
+      <div class="ml-3">
+       <p id="success-text" class="text-sm font-medium text-green-200">Account created successfully!</p>
+      </div>
+     </div>
+    </div><!-- Error Message -->
+    <div id="error-alert" class="error-message glass-alert mb-4 p-4 rounded-md">
+     <div class="flex">
+      <div class="flex-shrink-0">
+       <svg class="h-5 w-5 text-red-300" viewbox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+       </svg>
+      </div>
+      <div class="ml-3">
+       <p id="error-text" class="text-sm font-medium text-red-200"></p>
+      </div>
+     </div>
+    </div>
+    <form id="signup-form" class="space-y-6"><!-- Google Sign Up Button --> <button type="button" id="google-signup" class="w-full flex justify-center items-center px-4 py-3 rounded-md text-sm font-medium text-white glass-button focus:outline-none transition-colors">
+      <svg class="w-5 h-5 mr-2" viewbox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /> <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /> <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /> <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+      </svg> Continue with Google </button>
+     <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+       <div class="w-full border-t border-white border-opacity-30"></div>
+      </div>
+      <div class="relative flex justify-center text-sm"><span class="px-2 glass-text">Or continue with email</span>
+      </div>
+     </div><!-- Name Fields -->
+     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-field"><label for="firstName" class="block text-sm font-medium glass-label mb-1">First Name</label> <input type="text" id="firstName" name="firstName" required class="w-full px-3 py-2 rounded-md glass-input">
+      </div>
+      <div class="form-field"><label for="lastName" class="block text-sm font-medium glass-label mb-1">Last Name</label> <input type="text" id="lastName" name="lastName" required class="w-full px-3 py-2 rounded-md glass-input">
+      </div>
+     </div><!-- Email Field -->
+     <div class="form-field"><label for="email" class="block text-sm font-medium glass-label mb-1">Email Address</label> <input type="email" id="email" name="email" required class="w-full px-3 py-2 rounded-md glass-input" placeholder="you@example.com">
+     </div><!-- Password Fields -->
+     <div class="form-field"><label for="password" class="block text-sm font-medium glass-label mb-1">Password</label> <input type="password" id="password" name="password" required class="w-full px-3 py-2 rounded-md glass-input" minlength="6">
+     </div>
+     <div class="form-field"><label for="confirmPassword" class="block text-sm font-medium glass-label mb-1">Confirm Password</label> <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full px-3 py-2 rounded-md glass-input" minlength="6">
+     </div><!-- Submit Button --> <button type="submit" id="submit-btn" class="w-full flex justify-center items-center px-4 py-3 rounded-md text-sm font-medium text-white glass-button focus:outline-none disabled:cursor-not-allowed"> <span id="submit-text">Create Account</span>
+      <div id="submit-spinner" class="loading-spinner ml-2 hidden"></div></button>
+    </form>
+    <div class="mt-6 text-center">
+     <p class="text-sm glass-text">Already have an account? <a href="#" class="font-medium glass-link">Sign in</a></p>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Default configuration
+        const defaultConfig = {
+            form_title: "Create your account",
+            form_subtitle: "Join us today and get started",
+            success_message: "Account created successfully!",
+            primary_color: "#3b82f6",
+            surface_color: "#ffffff",
+            text_color: "#111827",
+            success_color: "#10b981",
+            error_color: "#ef4444"
+        };
+
+        let config = { ...defaultConfig };
+
+        // Form validation and submission logic
+        const form = document.getElementById('signup-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const submitSpinner = document.getElementById('submit-spinner');
+        const errorAlert = document.getElementById('error-alert');
+        const successAlert = document.getElementById('success-alert');
+        const errorText = document.getElementById('error-text');
+        const googleSignupBtn = document.getElementById('google-signup');
+
+        // Hide alerts initially
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorAlert.style.display = 'block';
+            successAlert.style.display = 'none';
+            errorAlert.classList.add('show');
+            setTimeout(() => {
+                errorAlert.classList.remove('show');
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 300);
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            document.getElementById('success-text').textContent = message;
+            successAlert.style.display = 'block';
+            errorAlert.style.display = 'none';
+            successAlert.classList.add('show');
+        }
+
+        function setLoading(loading) {
+            submitBtn.disabled = loading;
+            if (loading) {
+                submitText.textContent = 'Creating Account...';
+                submitSpinner.classList.remove('hidden');
+            } else {
+                submitText.textContent = 'Create Account';
+                submitSpinner.classList.add('hidden');
+            }
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validateForm(formData) {
+            const { firstName, lastName, email, password, confirmPassword } = formData;
+
+            if (!firstName.trim()) {
+                return { isValid: false, error: 'First name is required' };
+            }
+            if (!lastName.trim()) {
+                return { isValid: false, error: 'Last name is required' };
+            }
+            if (!email.trim()) {
+                return { isValid: false, error: 'Email is required' };
+            }
+            if (!validateEmail(email)) {
+                return { isValid: false, error: 'Please enter a valid email address' };
+            }
+            if (!password) {
+                return { isValid: false, error: 'Password is required' };
+            }
+            if (password.length < 6) {
+                return { isValid: false, error: 'Password must be at least 6 characters long' };
+            }
+            if (password !== confirmPassword) {
+                return { isValid: false, error: 'Passwords do not match' };
+            }
+
+            return { isValid: true };
+        }
+
+        // Simulate Supabase signup
+        async function simulateSupabaseSignup(email, password, firstName, lastName) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Simulate random success/failure for demo
+            const success = Math.random() > 0.3; // 70% success rate
+            
+            if (success) {
+                return { 
+                    data: { 
+                        user: { 
+                            id: 'user_' + Date.now(), 
+                            email, 
+                            user_metadata: { first_name: firstName, last_name: lastName } 
+                        } 
+                    }, 
+                    error: null 
+                };
+            } else {
+                return { 
+                    data: null, 
+                    error: { message: 'Email already registered or invalid credentials' } 
+                };
+            }
+        }
+
+        // Simulate Google OAuth
+        async function simulateGoogleOAuth() {
+            setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            const success = Math.random() > 0.2; // 80% success rate
+            
+            if (success) {
+                showSuccess('Successfully signed up with Google! Redirecting to dashboard...');
+                setTimeout(() => {
+                    // Simulate redirect to dashboard
+                    showSuccess('Redirected to /dashboard (simulated)');
+                }, 2000);
+            } else {
+                showError('Google sign-up failed. Please try again.');
+            }
+            
+            setLoading(false);
+        }
+
+        // Form submission handler
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            const validation = validateForm(formData);
+            if (!validation.isValid) {
+                showError(validation.error);
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                // Simulate Supabase auth.signUp call
+                const result = await simulateSupabaseSignup(
+                    formData.email, 
+                    formData.password, 
+                    formData.firstName, 
+                    formData.lastName
+                );
+
+                if (result.error) {
+                    showError(result.error.message);
+                } else {
+                    showSuccess(config.success_message || defaultConfig.success_message);
+                    form.reset();
+                    
+                    // Simulate redirect to dashboard after 2 seconds
+                    setTimeout(() => {
+                        showSuccess('Redirecting to /dashboard (simulated)');
+                    }, 2000);
+                }
+            } catch (error) {
+                showError('An unexpected error occurred. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Google signup handler
+        googleSignupBtn.addEventListener('click', simulateGoogleOAuth);
+
+        // Real-time password confirmation validation
+        document.getElementById('confirmPassword').addEventListener('input', (e) => {
+            const password = document.getElementById('password').value;
+            const confirmPassword = e.target.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                e.target.setCustomValidity('Passwords do not match');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+
+        // Element SDK implementation
+        async function onConfigChange(newConfig) {
+            config = { ...config, ...newConfig };
+            
+            // Update text content
+            document.getElementById('form-title').textContent = config.form_title || defaultConfig.form_title;
+            document.getElementById('form-subtitle').textContent = config.form_subtitle || defaultConfig.form_subtitle;
+            
+            // Update colors
+            const primaryColor = config.primary_color || defaultConfig.primary_color;
+            const surfaceColor = config.surface_color || defaultConfig.surface_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            
+            // Apply colors to elements
+            document.body.style.backgroundColor = '#f9fafb'; // Keep light background
+            document.querySelector('.bg-white').style.backgroundColor = surfaceColor;
+            document.getElementById('form-title').style.color = textColor;
+            document.getElementById('form-subtitle').style.color = '#6b7280';
+            
+            // Update button colors
+            const submitButton = document.getElementById('submit-btn');
+            submitButton.style.backgroundColor = primaryColor;
+            submitButton.style.borderColor = primaryColor;
+            
+            // Update focus colors for inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.style.setProperty('--tw-ring-color', primaryColor);
+            });
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.primary_color || defaultConfig.primary_color,
+                        set: (value) => {
+                            config.primary_color = value;
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.surface_color || defaultConfig.surface_color,
+                        set: (value) => {
+                            config.surface_color = value;
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ surface_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            config.text_color = value;
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["form_title", config.form_title || defaultConfig.form_title],
+                ["form_subtitle", config.form_subtitle || defaultConfig.form_subtitle],
+                ["success_message", config.success_message || defaultConfig.success_message]
+            ]);
+        }
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ef921e54093b33',t:'MTc2MzIxODMyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

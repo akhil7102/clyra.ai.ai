@@ -1,0 +1,254 @@
+@use 'variables.scss';
+@use 'z-index.scss';
+@use 'animations.scss';
+@use 'components/terminal.scss';
+@use 'components/resize-handle.scss';
+@use 'components/code.scss';
+@use 'components/editor.scss';
+@use 'components/toast.scss';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bolt-elements-bg-depth-1);
+  transition: background 200ms ease-in-out, color 200ms ease-in-out, border-color 200ms ease-in-out;
+}
+
+/* Hide chat prompt only when settings control panel is open */
+html[data-control-panel-open='true'] .z-prompt {
+  display: none !important;
+}
+
+/* Light theme uses the same dark base to match landing background */
+html[data-theme='light'] body {
+  background-color: #0A0A0A;
+}
+
+/* Dark theme keeps solid background */
+html[data-theme='dark'] body {
+  background-color: var(--bolt-elements-bg-depth-1);
+}
+
+:root {
+  --gradient-opacity: 0.8;
+  --primary-color: rgba(77, 168, 255, var(--gradient-opacity));
+  --secondary-color: rgba(94, 234, 212, var(--gradient-opacity));
+  --accent-color: rgba(52, 211, 153, var(--gradient-opacity));
+  // --primary-color: rgba(147, 112, 219, var(--gradient-opacity));
+  // --secondary-color: rgba(138, 43, 226, var(--gradient-opacity));
+  // --accent-color: rgba(180, 170, 220, var(--gradient-opacity));
+}
+
+.modern-scrollbar {
+  overflow: auto;
+
+  // WebKit scrollbar styling
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    // Use CSS variables for colors
+    background-color: var(--modern-scrollbar-thumb-background);
+    border-radius: 9999px; // pill shape
+    border: 2px solid transparent; // for padding-like effect
+    background-clip: content-box;
+    transition: background-color 0.2s ease-in-out; // Add transition
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    // Use CSS variable for hover color
+    background-color: var(--modern-scrollbar-thumb-backgroundHover);
+  }
+
+  // Firefox support
+  scrollbar-width: thin;
+  // Use CSS variables for Firefox colors
+  scrollbar-color: var(--modern-scrollbar-thumb-backgroundHover) transparent; // Use hover color for thumb for consistency
+}
+
+.modern-scrollbar-invert {
+  &::-webkit-scrollbar-thumb {
+    // Override with a contrasting color, e.g., primary text color with transparency
+    background-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 70%);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    // Darker/more opaque version on hover
+    background-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 50%);
+  }
+
+  // Firefox support for inverted colors
+  scrollbar-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 50%) transparent;
+}
+
+/* Global background layers */
+.app-bg-layers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gradient-background {
+  position: absolute;
+  bottom: -20vh;
+  left: 0;
+  width: 100vw;
+  height: 160vh;
+  background:
+    radial-gradient(
+      ellipse 100% 80% at 50% 100%,
+      #9EFFC7 0%,
+      #7BFFF4 20%,
+      rgba(123, 255, 244, 0.7) 35%,
+      rgba(0, 232, 255, 0.4) 50%,
+      rgba(0, 51, 59, 0.5) 65%,
+      rgba(0, 51, 59, 0.3) 78%,
+      rgba(0, 0, 0, 0.9) 90%,
+      #000000 100%
+    );
+  filter: blur(100px);
+  background-attachment: fixed;
+}
+
+.glow-overlay {
+  position: absolute;
+  bottom: -20vh;
+  left: 0;
+  width: 100vw;
+  height: 160vh;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 100%,
+    rgba(158, 255, 199, 0.5) 0%,
+    rgba(123, 255, 244, 0.35) 25%,
+    rgba(0, 232, 255, 0.2) 45%,
+    transparent 70%
+  );
+  filter: blur(120px);
+  animation: glowPulse 7s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+.diffusion-layer {
+  position: absolute;
+  bottom: -20vh;
+  left: 0;
+  width: 100vw;
+  height: 160vh;
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 100%,
+    rgba(158, 255, 199, 0.12) 0%,
+    rgba(123, 255, 244, 0.08) 35%,
+    transparent 65%
+  );
+  filter: blur(140px);
+  animation: diffusionPulse 9s ease-in-out infinite;
+}
+
+@keyframes diffusionPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.grain-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: grainMove 10s steps(8) infinite;
+}
+
+@keyframes grainMove {
+  0%, 100% { transform: translate(0, 0); }
+  12.5% { transform: translate(-4%, -4%); }
+  25% { transform: translate(-8%, 4%); }
+  37.5% { transform: translate(4%, -8%); }
+  50% { transform: translate(-4%, 12%); }
+  62.5% { transform: translate(12%, 4%); }
+  75% { transform: translate(0, 8%); }
+  87.5% { transform: translate(-12%, 0); }
+}
+
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    transparent 0%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.2) 60%,
+    rgba(0, 0, 0, 0.6) 85%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+}
+
+.shimmer-layer {
+  position: absolute;
+  bottom: -20vh;
+  left: 0;
+  width: 100vw;
+  height: 160vh;
+  background: radial-gradient(
+    ellipse 60% 40% at 50% 100%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 50%
+  );
+  animation: shimmer 5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@media (max-width: 768px) {
+  .gradient-background { filter: blur(70px); }
+  .glow-overlay { filter: blur(85px); }
+}
+
+@media (max-width: 480px) {
+  .gradient-background { filter: blur(60px); }
+  .glow-overlay { filter: blur(75px); }
+}
+
+.chatbox-disabled {
+  cursor: not-allowed;
+}
+.chatbox-disabled textarea,
+.chatbox-disabled button,
+.chatbox-disabled input,
+.chatbox-disabled select {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.chatbox-disabled .IconButton,
+.chatbox-disabled [role='button'] {
+  cursor: not-allowed;
+  pointer-events: none;
+}

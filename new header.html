@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clyra.ai Futuristic Navigation</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    .neon-glow {
+      text-shadow: 0 0 10px rgba(102, 255, 178, 0.8),
+                   0 0 20px rgba(102, 255, 178, 0.6),
+                   0 0 30px rgba(102, 255, 178, 0.4);
+    }
+
+    .neon-border {
+      box-shadow: 0 0 15px rgba(102, 255, 178, 0.5),
+                  inset 0 0 15px rgba(102, 255, 178, 0.1);
+    }
+
+    .neon-hover {
+      transition: all 0.3s ease;
+    }
+
+    .neon-hover:hover {
+      text-shadow: 0 0 15px rgba(102, 255, 178, 1),
+                   0 0 25px rgba(102, 255, 178, 0.8),
+                   0 0 35px rgba(102, 255, 178, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .cyber-line {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyber-line::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #66ffb2, transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cyber-line:hover::before {
+      left: 100%;
+    }
+
+    .profile-avatar {
+      background: linear-gradient(135deg, #66ffb2 0%, #a8ffcc 100%);
+      box-shadow: 0 0 20px rgba(102, 255, 178, 0.6),
+                  0 0 40px rgba(168, 255, 204, 0.4);
+    }
+
+    .dropdown-enter {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .glass-effect {
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 157, 0.2);
+    }
+
+    .cyber-grid {
+      background-image: 
+        linear-gradient(rgba(102, 255, 178, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102, 255, 178, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .pulse-glow {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(102, 255, 178, 0.5),
+                    inset 0 0 15px rgba(102, 255, 178, 0.1);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(102, 255, 178, 0.8),
+                    inset 0 0 20px rgba(102, 255, 178, 0.2);
+      }
+    }
+
+    .social-icon {
+      transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px) scale(1.1);
+      filter: drop-shadow(0 0 10px rgba(102, 255, 178, 0.8));
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="bg-gradient-to-br from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f] min-h-full cyber-grid">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 glass-effect z-50 border-b border-[#66ffb2]/30">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16"><!-- Logo -->
+     <div class="flex-shrink-0"><a href="#" class="flex items-center space-x-1 text-2xl font-bold" style="font-family: 'Orbitron', sans-serif;"> <span id="logo-main" class="neon-glow" style="color: #66ffb2;">Clyra</span> <span class="text-[#a8ffcc]">.ai</span> </a>
+     </div><!-- Desktop Navigation Links -->
+     <div class="hidden md:flex items-center space-x-8"><a href="#" id="nav-link-1" class="cyber-line neon-hover text-gray-300 text-sm font-semibold tracking-wide">Community</a> <a href="#" id="nav-link-2" class="cyber-line neon-hover text-gray-300 text-sm font-semibold tracking-wide">Enterprise</a> <!-- Resources Dropdown -->
+      <div class="relative" id="resources-dropdown"><button id="resources-btn" class="cyber-line neon-hover text-gray-300 text-sm font-semibold tracking-wide flex items-center space-x-1"> <span id="nav-link-3">Resources</span>
+        <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg></button>
+       <div id="dropdown-menu" class="absolute left-0 mt-2 w-48 glass-effect rounded-lg neon-border py-2 hidden dropdown-enter"><a href="#" id="dropdown-item-1" class="block px-4 py-2 text-sm text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 transition-all duration-150">Docs</a> <a href="#" id="dropdown-item-2" class="block px-4 py-2 text-sm text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 transition-all duration-150">Blog</a> <a href="#" id="dropdown-item-3" class="block px-4 py-2 text-sm text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 transition-all duration-150">Templates</a>
+       </div>
+      </div><a href="#" id="nav-link-4" class="cyber-line neon-hover text-gray-300 text-sm font-semibold tracking-wide">Careers</a> <a href="#" id="nav-link-5" class="cyber-line neon-hover text-gray-300 text-sm font-semibold tracking-wide">Pricing</a>
+     </div><!-- Right Section: Social Icons + Profile -->
+     <div class="hidden md:flex items-center space-x-6"><!-- Social Icons -->
+      <div class="flex items-center space-x-4 pr-4 border-r border-[#66ffb2]/30"><a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z" />
+        </svg></a> <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg></a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg></a> <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg></a>
+      </div><!-- Profile Dropdown -->
+      <div class="relative" id="profile-dropdown"><button id="profile-btn" class="flex items-center space-x-3 focus:outline-none group">
+        <div class="profile-avatar w-10 h-10 rounded-full flex items-center justify-center text-[#0a0a0f] font-bold text-sm pulse-glow"><span id="avatar-initial">C</span>
+        </div>
+        <div class="text-left">
+         <div id="username-display" class="text-sm font-semibold text-[#66ffb2] group-hover:text-[#a8ffcc] transition-colors">
+          CyberUser
+         </div>
+        </div>
+        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" id="profile-arrow" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg></button>
+       <div id="profile-menu" class="absolute right-0 mt-2 w-56 glass-effect rounded-lg neon-border py-2 hidden dropdown-enter">
+        <div class="px-4 py-3 border-b border-[#66ffb2]/20">
+         <p class="text-xs text-gray-400 uppercase tracking-wider">Signed in as</p>
+         <p id="profile-username" class="text-sm font-semibold text-[#66ffb2] mt-1">CyberUser</p>
+        </div><a href="#" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 transition-all duration-150">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+         </svg><span>Settings</span> </a> <a href="#" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 transition-all duration-150">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg><span>History</span> </a>
+        <div class="border-t border-[#66ffb2]/20 mt-2"></div><a href="#" class="flex items-center space-x-3 px-4 py-3 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-150">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+         </svg><span>Sign Out</span> </a>
+       </div>
+      </div>
+     </div><!-- Mobile Menu Button -->
+     <div class="md:hidden"><button id="mobile-menu-btn" class="text-gray-400 hover:text-[#66ffb2] focus:outline-none">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /> <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div>
+   </div><!-- Mobile Menu -->
+   <div id="mobile-menu" class="hidden md:hidden glass-effect border-t border-[#66ffb2]/30">
+    <div class="px-4 pt-2 pb-4 space-y-2"><!-- Mobile Profile -->
+     <div class="flex items-center space-x-3 px-3 py-3 border-b border-[#66ffb2]/20 mb-2">
+      <div class="profile-avatar w-10 h-10 rounded-full flex items-center justify-center text-[#0a0a0f] font-bold text-sm"><span id="mobile-avatar-initial">C</span>
+      </div>
+      <div>
+       <p class="text-sm font-semibold text-[#66ffb2]" id="mobile-username-display">CyberUser</p>
+       <p class="text-xs text-gray-400">Online</p>
+      </div>
+     </div><a href="#" id="mobile-nav-link-1" class="block px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Community</a> <a href="#" id="mobile-nav-link-2" class="block px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Enterprise</a> <!-- Mobile Resources Dropdown -->
+     <div><button id="mobile-resources-btn" class="w-full text-left px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150 flex items-center justify-between"> <span id="mobile-nav-link-3">Resources</span>
+       <svg class="w-4 h-4 transition-transform duration-200" id="mobile-dropdown-arrow" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+       </svg></button>
+      <div id="mobile-dropdown-menu" class="hidden pl-6 mt-1 space-y-1"><a href="#" id="mobile-dropdown-item-1" class="block px-3 py-2 text-sm text-gray-400 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Docs</a> <a href="#" id="mobile-dropdown-item-2" class="block px-3 py-2 text-sm text-gray-400 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Blog</a> <a href="#" id="mobile-dropdown-item-3" class="block px-3 py-2 text-sm text-gray-400 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Templates</a>
+      </div>
+     </div><a href="#" id="mobile-nav-link-4" class="block px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Careers</a> <a href="#" id="mobile-nav-link-5" class="block px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">Pricing</a> <!-- Mobile Profile Options -->
+     <div class="border-t border-[#66ffb2]/20 pt-2 mt-2"><a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+       </svg><span>Settings</span> </a> <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-300 hover:text-[#66ffb2] hover:bg-[#66ffb2]/10 rounded-md transition-all duration-150">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg><span>History</span> </a> <a href="#" class="flex items-center space-x-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-md transition-all duration-150">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+       </svg><span>Sign Out</span> </a>
+     </div><!-- Mobile Social Icons -->
+     <div class="flex items-center justify-center space-x-6 px-3 pt-4 border-t border-[#66ffb2]/20 mt-4"><a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+       <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z" />
+       </svg></a> <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+       <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+       </svg></a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+       <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+       </svg></a> <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-[#66ffb2]">
+       <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+       </svg></a>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Demo Content -->
+  <div class="pt-24 px-4 max-w-7xl mx-auto">
+   <div class="text-center py-20">
+    <h1 class="text-6xl font-bold text-white mb-4 neon-glow" style="font-family: 'Orbitron', sans-serif;">Welcome to <span style="color: #66ffb2;">Clyra.ai</span></h1>
+    <p class="text-gray-400 text-xl mt-6" style="font-family: 'Rajdhani', sans-serif;">Experience the future of navigation</p>
+    <div class="mt-12 flex justify-center space-x-4">
+     <div class="glass-effect neon-border px-8 py-4 rounded-lg">
+      <p class="text-[#a8ffcc] text-sm font-semibold">Futuristic Design</p>
+     </div>
+     <div class="glass-effect neon-border px-8 py-4 rounded-lg">
+      <p class="text-[#66ffb2] text-sm font-semibold">Neon Aesthetics</p>
+     </div>
+     <div class="glass-effect neon-border px-8 py-4 rounded-lg">
+      <p class="text-[#8affcc] text-sm font-semibold">Cyber Vibes</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      logo_text: "Clyra",
+      nav_link_1: "Community",
+      nav_link_2: "Enterprise",
+      nav_link_3: "Resources",
+      nav_link_4: "Careers",
+      nav_link_5: "Pricing",
+      dropdown_item_1: "Docs",
+      dropdown_item_2: "Blog",
+      dropdown_item_3: "Templates",
+      username: "CyberUser",
+      neon_primary: "#66ffb2",
+      neon_secondary: "#a8ffcc",
+      background_dark: "#0a0a0f",
+      glass_bg: "rgba(10, 10, 15, 0.8)",
+      text_primary: "#d1d5db"
+    };
+
+    let isDropdownOpen = false;
+    let isMobileMenuOpen = false;
+    let isMobileDropdownOpen = false;
+    let isProfileOpen = false;
+
+    async function onConfigChange(config) {
+      const username = config.username || defaultConfig.username;
+      const initial = username.charAt(0).toUpperCase();
+
+      // Update logo
+      document.getElementById('logo-main').textContent = config.logo_text || defaultConfig.logo_text;
+
+      // Update navigation links
+      document.getElementById('nav-link-1').textContent = config.nav_link_1 || defaultConfig.nav_link_1;
+      document.getElementById('nav-link-2').textContent = config.nav_link_2 || defaultConfig.nav_link_2;
+      document.getElementById('nav-link-3').textContent = config.nav_link_3 || defaultConfig.nav_link_3;
+      document.getElementById('nav-link-4').textContent = config.nav_link_4 || defaultConfig.nav_link_4;
+      document.getElementById('nav-link-5').textContent = config.nav_link_5 || defaultConfig.nav_link_5;
+
+      // Update dropdown items
+      document.getElementById('dropdown-item-1').textContent = config.dropdown_item_1 || defaultConfig.dropdown_item_1;
+      document.getElementById('dropdown-item-2').textContent = config.dropdown_item_2 || defaultConfig.dropdown_item_2;
+      document.getElementById('dropdown-item-3').textContent = config.dropdown_item_3 || defaultConfig.dropdown_item_3;
+
+      // Update mobile navigation
+      document.getElementById('mobile-nav-link-1').textContent = config.nav_link_1 || defaultConfig.nav_link_1;
+      document.getElementById('mobile-nav-link-2').textContent = config.nav_link_2 || defaultConfig.nav_link_2;
+      document.getElementById('mobile-nav-link-3').textContent = config.nav_link_3 || defaultConfig.nav_link_3;
+      document.getElementById('mobile-nav-link-4').textContent = config.nav_link_4 || defaultConfig.nav_link_4;
+      document.getElementById('mobile-nav-link-5').textContent = config.nav_link_5 || defaultConfig.nav_link_5;
+
+      // Update mobile dropdown
+      document.getElementById('mobile-dropdown-item-1').textContent = config.dropdown_item_1 || defaultConfig.dropdown_item_1;
+      document.getElementById('mobile-dropdown-item-2').textContent = config.dropdown_item_2 || defaultConfig.dropdown_item_2;
+      document.getElementById('mobile-dropdown-item-3').textContent = config.dropdown_item_3 || defaultConfig.dropdown_item_3;
+
+      // Update profile username
+      document.getElementById('username-display').textContent = username;
+      document.getElementById('profile-username').textContent = username;
+      document.getElementById('avatar-initial').textContent = initial;
+      document.getElementById('mobile-username-display').textContent = username;
+      document.getElementById('mobile-avatar-initial').textContent = initial;
+
+      // Update colors
+      const neonPrimary = config.neon_primary || defaultConfig.neon_primary;
+      const neonSecondary = config.neon_secondary || defaultConfig.neon_secondary;
+      const backgroundDark = config.background_dark || defaultConfig.background_dark;
+      const glassBg = config.glass_bg || defaultConfig.glass_bg;
+      const textPrimary = config.text_primary || defaultConfig.text_primary;
+
+      document.getElementById('logo-main').style.color = neonPrimary;
+      document.getElementById('username-display').style.color = neonPrimary;
+      document.getElementById('profile-username').style.color = neonPrimary;
+      document.getElementById('mobile-username-display').style.color = neonPrimary;
+    }
+
+    // Desktop dropdown functionality
+    const resourcesBtn = document.getElementById('resources-btn');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const dropdownArrow = document.getElementById('dropdown-arrow');
+
+    resourcesBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      isDropdownOpen = !isDropdownOpen;
+      
+      if (isDropdownOpen) {
+        dropdownMenu.classList.remove('hidden');
+        dropdownArrow.style.transform = 'rotate(180deg)';
+      } else {
+        dropdownMenu.classList.add('hidden');
+        dropdownArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    // Profile dropdown functionality
+    const profileBtn = document.getElementById('profile-btn');
+    const profileMenu = document.getElementById('profile-menu');
+    const profileArrow = document.getElementById('profile-arrow');
+
+    profileBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      isProfileOpen = !isProfileOpen;
+      
+      if (isProfileOpen) {
+        profileMenu.classList.remove('hidden');
+        profileArrow.style.transform = 'rotate(180deg)';
+      } else {
+        profileMenu.classList.add('hidden');
+        profileArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('resources-dropdown').contains(e.target)) {
+        dropdownMenu.classList.add('hidden');
+        dropdownArrow.style.transform = 'rotate(0deg)';
+        isDropdownOpen = false;
+      }
+      
+      if (!document.getElementById('profile-dropdown').contains(e.target)) {
+        profileMenu.classList.add('hidden');
+        profileArrow.style.transform = 'rotate(0deg)';
+        isProfileOpen = false;
+      }
+    });
+
+    // Mobile menu functionality
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      isMobileMenuOpen = !isMobileMenuOpen;
+      
+      if (isMobileMenuOpen) {
+        mobileMenu.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    });
+
+    // Mobile dropdown functionality
+    const mobileResourcesBtn = document.getElementById('mobile-resources-btn');
+    const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
+    const mobileDropdownArrow = document.getElementById('mobile-dropdown-arrow');
+
+    mobileResourcesBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      isMobileDropdownOpen = !isMobileDropdownOpen;
+      
+      if (isMobileDropdownOpen) {
+        mobileDropdownMenu.classList.remove('hidden');
+        mobileDropdownArrow.style.transform = 'rotate(180deg)';
+      } else {
+        mobileDropdownMenu.classList.add('hidden');
+        mobileDropdownArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.neon_primary || defaultConfig.neon_primary,
+              set: (value) => {
+                config.neon_primary = value;
+                window.elementSdk.setConfig({ neon_primary: value });
+              }
+            },
+            {
+              get: () => config.neon_secondary || defaultConfig.neon_secondary,
+              set: (value) => {
+                config.neon_secondary = value;
+                window.elementSdk.setConfig({ neon_secondary: value });
+              }
+            },
+            {
+              get: () => config.background_dark || defaultConfig.background_dark,
+              set: (value) => {
+                config.background_dark = value;
+                window.elementSdk.setConfig({ background_dark: value });
+              }
+            },
+            {
+              get: () => config.glass_bg || defaultConfig.glass_bg,
+              set: (value) => {
+                config.glass_bg = value;
+                window.elementSdk.setConfig({ glass_bg: value });
+              }
+            },
+            {
+              get: () => config.text_primary || defaultConfig.text_primary,
+              set: (value) => {
+                config.text_primary = value;
+                window.elementSdk.setConfig({ text_primary: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["logo_text", config.logo_text || defaultConfig.logo_text],
+          ["nav_link_1", config.nav_link_1 || defaultConfig.nav_link_1],
+          ["nav_link_2", config.nav_link_2 || defaultConfig.nav_link_2],
+          ["nav_link_3", config.nav_link_3 || defaultConfig.nav_link_3],
+          ["nav_link_4", config.nav_link_4 || defaultConfig.nav_link_4],
+          ["nav_link_5", config.nav_link_5 || defaultConfig.nav_link_5],
+          ["dropdown_item_1", config.dropdown_item_1 || defaultConfig.dropdown_item_1],
+          ["dropdown_item_2", config.dropdown_item_2 || defaultConfig.dropdown_item_2],
+          ["dropdown_item_3", config.dropdown_item_3 || defaultConfig.dropdown_item_3],
+          ["username", config.username || defaultConfig.username]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5280d1666b5d1',t:'MTc2MjYwNTgxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
